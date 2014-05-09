@@ -1,0 +1,78 @@
+Google Maps
+
+function initMap(){
+var mapOptions = {
+	center:new google.maps.LatLng(51,-0.12),
+	zoom:5,
+	mapTypeId:google.maps.MapTypeId.ROADMAP //ROADMAP, SATALLITE, TERRAIN and HYBRID
+}
+var map = new google.maps.Map(target_selector, mapOptions);
+}
+google.maps.event.addDomListener(window, 'load', initMap);
+mapTypeId-
+ROADMAP (normal, default 2D map)
+SATELLITE (photographic map)
+HYBRID (photographic map + roads and city names)
+TERRAIN (map with mountains, rivers, etc.)
+
+Google Maps - Overlays-
+Marker - Single locations on a map. Markers can also display custom icon images
+Polyline - Series of straight lines on a map
+Polygon - Series of straight lines on a map, and the shape is "closed"
+Circle and Rectangle
+Info Windows - Displays content within a popup balloon on top of a map
+Custom overlays
+
+var marker = new google.maps.Marker({
+	position: new google.maps.Latlng(51,-0.12),
+	animation: google.maps.Animation.BOUNCE, //optional
+	icon:'point.png' //optional
+});
+marker.setMap(map);
+
+Polyline
+Define delhi, bagpat, ... LatLng object. eg. var delhi = new google.maps.LatLng(28,76);
+var flightPath = new google.maps.Polyline({
+	path: [delhi, baghpat, gurgaon],
+	strokeColor: '#ff00ff', //optional
+	strokeOpacity: 0.6, //optional
+	strokeWeight: 3, //optional
+	editable: true //user draggable points on path, optional
+});
+flightPath.setMap(map);
+
+Polygon: 
+-add fillColor and fillOpacity to polyline options
+-eg. path: [delhi, baghpat, gurgaon, delhi]
+var flightPath = new google.maps.Polygon({
+	path: [delhi, baghpat, gurgaon, delhi],
+	strokeColor: 'green',
+	strokeOpacity: 0.3,
+	strokeWeight: 2,
+	fillColor: '#ff00ff',
+	fillOpacity: 0.6,
+	editable: true
+});
+flightPath.setMap(map);
+Note: for polyline & polygon all options are optional except path(array of LatLng object of locations)
+
+Circle:
+- options same as polygon except it uses center and radius instead of path
+var aCity = new google.maps.Circle({
+	center: delhi, //object of LatLng
+	radius:20000, //radius in meters
+	strokeColor: 'green',
+	strokeOpacity: 0.3,
+	strokeWeight: 2,
+	fillColor: '#ff00ff',
+	fillOpacity: 0.6,
+	editable: true
+});
+aCity.setMap(map);
+
+InfoWindow-
+var infoW = new google.maps.InfoWindow({
+	content:html_with_width_height_in_main_container,
+	maxWidth:220
+});
+infoW.open(map, marker);

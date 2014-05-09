@@ -1,0 +1,313 @@
+541190652
+
+junior anilkumar/12345
+
+
+sachin kul 09278175909
+
+
+
+HTML5 Attributes
+HTML5 Events
+HTML5 Web Forms 2.0
+HTML5 SVG
+HTML5 MathML
+HTML5 Web Storage
+HTML5 Web SQL
+HTML5 Server-Sent Events
+HTML5 WebSocket
+HTML5 Canvas
+HTML5 Audio & Video
+HTML5 Geolocation
+HTML5 Microdata
+HTML5 Drag and drop
+HTML5 Web Workers
+
+HTML5 - WebStorage
+localStorage.number = 20;
+sessionStorage.number = 20;
+localStorage.clear();localStorage.remove('key'); //to clear localStorage
+Maximum cookie size 4kb
+
+HTML5 - Web SQL Database
+To create and open a database, use the following code:
+var db = openDatabase('mydb', '1.0', 'Test DB', 2 * 1024 * 1024);
+Above method took following five paramters:
+Database name
+Version number
+Text description
+Size of database
+Creation callback (optional)
+The last and 5th argument, creation callback will be called if the database is being created. 
+
+Executing queries:
+db.transaction(function (tx) {  
+   tx.executeSql('CREATE TABLE IF NOT EXISTS LOGS (id unique, log)');
+});
+
+INSERT Operation:
+db.transaction(function (tx) {
+   tx.executeSql('CREATE TABLE IF NOT EXISTS LOGS (id unique, log)');
+   tx.executeSql('INSERT INTO LOGS (id, log) VALUES (1, "foobar")');
+   tx.executeSql('INSERT INTO LOGS (id, log) VALUES (2, "logmsg")');
+});
+for dynamic values
+db.transaction(function (tx) {  
+  tx.executeSql('CREATE TABLE IF NOT EXISTS LOGS (id unique, log)');
+  tx.executeSql('INSERT INTO LOGS 
+                        (id,log) VALUES (?, ?'), [e_id, e_log];
+});
+
+READ Operation:
+db.transaction(function (tx) {
+   tx.executeSql('SELECT * FROM LOGS', [], function (tx, results) {
+   var len = results.rows.length, i;
+   msg = "<p>Found rows: " + len + "</p>";
+   document.querySelector('#status').innerHTML +=  msg;
+   for (i = 0; i < len; i++){
+      alert(results.rows.item(i).log );
+   }
+ }, null);
+});
+
+
+HTML5 - WebSockets
+Following is the API which creates a new WebSocket object.
+var Socket = new WebSocket(url, [protocal] );
+WebSocket Attributes:
+1. Socket.readyState- same as ajax
+2. Socket.bufferedAmount-The readonly attribute bufferedAmount represents the number of bytes of UTF-8 text that have been queued using send() method.
+WebSocket Events:
+Event	Event Handler	Description
+open	Socket.onopen	This event occurs when socket connection is established.
+message	Socket.onmessage	This event occurs when client receives data from server.
+error	Socket.onerror	This event occurs when there is any error in communication.
+close	Socket.onclose	This event occurs when connection is closed.
+WebSocket Methods:
+Socket.send()	
+The send(data) method transmits data using the connection.
+Socket.close()	
+The close() method would be used to terminate any existing connection.
+eg.
+<!DOCTYPE HTML>
+<html>
+<head>
+<script type="text/javascript">
+function WebSocketTest()
+{
+  if ("WebSocket" in window)
+  {
+     alert("WebSocket is supported by your Browser!");
+     // Let us open a web socket
+     var ws = new WebSocket("ws://localhost:9998/echo");
+     ws.onopen = function()
+     {
+        // Web Socket is connected, send data using send()
+        ws.send("Message to send");
+        alert("Message is sent...");
+     };
+     ws.onmessage = function (evt) 
+     { 
+        var received_msg = evt.data;
+        alert("Message is received...");
+     };
+     ws.onclose = function()
+     { 
+        // websocket is closed.
+        alert("Connection is closed..."); 
+     };
+  }
+  else
+  {
+     // The browser doesn't support WebSocket
+     alert("WebSocket NOT supported by your Browser!");
+  }
+}
+</script>
+</head>
+<body>
+<div id="sse">
+   <a href="javascript:WebSocketTest()">Run WebSocket</a>
+</div>
+</body>
+</html>
+
+HTML5 - Geolocation
+Geolocation object which can be created as follows:
+var geolocation = navigator.geolocation;
+Geolocation Methods:
+1. getCurrentPosition()- This method retrieves the current geographic location of the user.
+2. watchPosition()- This method retrieves periodic updates about the current geographic location of the device.
+3. clearWatch()- This method cancels an ongoing watchPosition call.
+Example:
+function getLocation() {
+   var geolocation = navigator.geolocation;
+   geolocation.getCurrentPosition(showLocation, errorHandler);
+}
+Here showLocation and errorHandler are callback methods which would be used to get actual position as explained in next section and to handle errors if there is any.
+Location Properties:
+coords	objects	
+Specifies the geographic location of the device. The location is expressed as a set of geographic coordinates together with information about heading and speed.
+
+coords.latitude	Number	
+Specifies the latitude estimate in decimal degrees. The value range is [-90.00, +90.00].
+
+coords.longitude	Number	
+Specifies the longitude estimate in decimal degrees. The value range is [-180.00, +180.00].
+
+coords.altitude	Number	
+[Optional] Specifies the altitude estimate in meters above the WGS 84 ellipsoid.
+
+coords.accuracy	Number	
+[Optional] Specifies the accuracy of the latitude and longitude estimates in meters.
+
+coords.altitudeAccuracy	Number	
+[Optional] Specifies the accuracy of the altitude estimate in meters.
+
+coords.heading	Number	
+[Optional] Specifies the device's current direction of movement in degrees counting clockwise relative to true north.
+
+coords.speed	Number	
+[Optional] Specifies the device's current ground speed in meters per second.
+
+timestamp	date	
+Specifies the time when the location information was retrieved and the Position object created.
+
+
+Handling Errors(code, message)-
+
+Code	Constant	Description
+0	UNKNOWN_ERROR
+1	PERMISSION_DENIED	
+2	POSITION_UNAVAILABLE- The location of the device could not be determined.
+3	TIMEOUT
+
+Position Options:getCurrentPosition(callback, ErrorCallback, options)
+Property	Type	Description
+enableHighAccuracy Boolean- Specifies whether the widget wants to receive the most accurate location estimate possible. By default this is false.
+timeout	Number-	The timeout property is the number of milliseconds your web application is willing to wait for a position.
+maximumAge	Number- Specifies the expiry time in milliseconds for cached location information.
+
+eg.
+function getLocation() {
+   var geolocation = navigator.geolocation;
+   geolocation.getCurrentPosition(showLocation, errorHandler,
+                                 {maximumAge: 75000});
+}
+--
+<!DOCTYPE HTML>
+<head>
+<script type="text/javascript">
+var watchID;
+var geoLoc;
+
+function showLocation(position) {
+  var latitude = position.coords.latitude;
+  var longitude = position.coords.longitude;
+  alert("Latitude : " + latitude + " Longitude: " + longitude);
+}
+
+function errorHandler(err) {
+  if(err.code == 1) {
+    alert("Error: Access is denied!");
+  }else if( err.code == 2) {
+    alert("Error: Position is unavailable!");
+  }
+}
+function getLocationUpdate(){
+
+   if(navigator.geolocation){
+      // timeout at 60000 milliseconds (60 seconds)
+      var options = {timeout:60000};
+      geoLoc = navigator.geolocation;
+      watchID = geoLoc.watchPosition(showLocation, 
+                                     errorHandler,
+                                     options);
+   }else{
+      alert("Sorry, browser does not support geolocation!");
+   }
+}
+function stopWatch(){
+   geoLoc.clearWatch(watchID);
+}
+</script>
+</head>
+<html>
+<body>
+   <form>
+     <input type="button" onclick="getLocationUpdate();"  
+                             value="Watch Update"/>
+     <input type="button" onclick="stopWatch();"  
+                             value="Stop Watch"/>
+   </form>
+</body>
+
+
+HTML5 Microdata
+Microdata is a standardized way to provide additional semantics in your web pages.
+Global Attributes:
+Microdata introduces five global attributes which would be available for any element to use and give context for machines about your data.
+
+Attribute	Description
+itemscope	This is used to create an item. The itemscope attribute is a boolean attribute that tells that there is Microdata on this page, and this is where it starts.
+itemtype	This attribute is a valid URL which defines the item and provides the context for the properties.
+itemid	This attribute is global identifier for the item.
+itemprop	This attribute defines a property of the item.
+itemref	This attribute gives a list of additional elements to crawl to find the name-value pairs of the item.
+eg.
+Using about properties a person microdata could be as follows:
+
+<section itemscope itemtype="http://data-vocabulary.org/Person">
+<h1 itemprop="name">Andy Runie</h1>
+<p>
+<img itemprop="photo" src="http://www.example.com/photo.jpg">
+</p>
+<a itemprop="url" href="http://www.example.com/blog">My Blog</a>
+</section>
+Google supports microdata as part of their Rich Snippets program. When Google's web crawler parses your page and finds microdata properties that conform to the http://data-vocabulary.org/Person vocabulary, it parses out those properties and stores them alongside the rest of the page data.
+
+
+HTML5 Web Workers
+JavaScript was designed to run in a single-threaded environment, meaning multiple scripts cannot run at the same time. Consider a situation where you need to handle UI events, query and process large amounts of API data, and manipulate the DOM.
+Javascript will hang your browser in situation where CPU utilization is high.
+How Web Workers Work?
+var worker = new Worker('bigLoop.js');
+If the specified javascript file exists, the browser will spawn a new worker thread, which is downloaded asynchronously. If the path to your worker returns an 404, the worker will fail silently.
+
+If your application has multiple supporting javascript files, you can import them importScripts() method which takes file name(s) as argument separated by comma as follows:
+
+importScripts("helper.js", "anotherHelper.js");
+Once the Web Worker is spawned, communication between web worker and its parent page is done using the postMessage() method. Depending on your browser/version, postMessage() can accept either a string or JSON object as its single argument.
+Stopping Web Workers:
+Web Workers don't stop by themselves but the page that started them can stop them by calling terminate() method.
+worker.terminate();
+Handling Errors:
+<script>
+      var worker = new Worker('bigLoop.js');
+      worker.onmessage = function (event) {
+        alert("Completed " + event.data + "iterations" );
+      };
+
+      worker.onerror = function (event) {
+         console.log(event.message, event);
+      };
+
+      function sayHello(){
+         alert("Hello sir...." );
+      }
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

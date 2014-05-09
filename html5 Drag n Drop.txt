@@ -1,0 +1,117 @@
+HTML5 Drag and drop
+Events	Description
+dragstart	Fires when the user starts dragging of the object.
+dragenter	Fired when the mouse is first moved over the target element while a drag is occuring. A listener for this event should indicate whether a drop is allowed over this location. If there are no listeners, or the listeners perform no operations, then a drop is not allowed by default.
+dragover	This event is fired as the mouse is moved over an element when a drag is occuring. Much of the time, the operation that occurs during a listener will be the same as the dragenter event.
+dragleave	This event is fired when the mouse leaves an element while a drag is occuring. Listeners should remove any highlighting or insertion markers used for drop feedback.
+drag	Fires every time the mouse is moved while the object is being dragged.
+drop	The drop event is fired on the element where the drop was occured at the end of the drag operation. A listener would be responsible for retrieving the data being dragged and inserting it at the drop location.
+dragend	Fires when the user releases the mouse button while dragging an object.
+Note: Note that only drag events are fired; mouse events such as mousemove are not fired during a drag operation.
+
+The DataTransfer Object:
+The DataTransfer object holds data about the drag and drop operation. This data can be retrieved and set in terms of various attributes associated with DataTransfer object as explained below:
+
+S.N.	DataTransfer attrobutes and their description
+1	dataTransfer.dropEffect [ = value ]
+Returns the kind of operation that is currently selected.
+
+This attribute can be set, to change the selected operation.
+
+The possible values are none, copy, link, and move.
+
+2	dataTransfer.effectAllowed [ = value ]
+Returns the kinds of operations that are to be allowed.
+
+This attribute can be set, to change the allowed operations.
+
+The possible values are none, copy, copyLink, copyMove, link, linkMove, move, all and uninitialized.
+
+3	dataTransfer.types
+Returns a DOMStringList listing the formats that were set in the dragstart event. In addition, if any files are being dragged, then one of the types will be the string "Files".
+
+4	dataTransfer.clearData( [ format ] ) 
+Removes the data of the specified formats. Removes all data if the argument is omitted.
+
+5	dataTransfer.setData(format, data)
+Adds the specified data.
+
+6	data = dataTransfer.getData(format)
+Returns the specified data. If there is no such data, returns the empty string.
+
+7	dataTransfer.files
+Returns a FileList of the files being dragged, if any.
+
+8	dataTransfer.setDragImage(element, x, y) 
+Uses the given element to update the drag feedback, replacing any previously specified feedback.
+
+9	dataTransfer.addElement(element)
+Adds the given element to the list of elements used to render the drag feedback.
+
+eg.
+<!DOCTYPE HTML>
+<html>
+<head>
+<style type="text/css">
+#boxA, #boxB {
+   float:left;padding:10px;margin:10px;-moz-user-select:none;
+}
+#boxA { background-color: #6633FF; width:75px; height:75px;  }
+#boxB { background-color: #FF6699; width:150px; height:150px; }
+</style>
+<script type="text/javascript">
+function dragStart(ev) {
+   ev.dataTransfer.effectAllowed='move';
+   ev.dataTransfer.setData("Text", ev.target.getAttribute('id'));
+   ev.dataTransfer.setDragImage(ev.target,0,0);
+   return true;
+}
+function dragEnter(ev) {
+   event.preventDefault();
+   return true;
+}
+function dragOver(ev) {
+    return false;
+}
+function dragDrop(ev) {
+   var src = ev.dataTransfer.getData("Text");
+   ev.target.appendChild(document.getElementById(src));
+   ev.stopPropagation();
+   return false;
+}
+</script>
+</head>
+<body>
+<center>
+<h2>Drag and drop HTML5 demo</h2>
+<div>Try to move the purple box into the pink box.</div>
+
+<div id="boxA" draggable="true" 
+     ondragstart="return dragStart(event)">
+   <p>Drag Me</p>
+</div>
+<div id="boxB" ondragenter="return dragEnter(event)" 
+     ondrop="return dragDrop(event)" 
+     ondragover="return dragOver(event)">Dustbin</div>
+</center>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
