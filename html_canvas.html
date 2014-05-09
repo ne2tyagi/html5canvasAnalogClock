@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<canvas id="canv" width="310" height="250">Canvas not supported. Please upgrade your browser.</canvas>
+<script type="text/javascript">
+var canv=document.getElementById('canv');
+var context=canv.getContext('2d');
+context.beginPath();
+context.moveTo(20,20);
+context.lineTo(200,40);
+context.arc(200,40,60,0,0.5*Math.PI,false);
+context.quadraticCurveTo(250,150,180,100);
+context.bezierCurveTo(100,280,300,0,300,200);
+context.strokeStyle="blue";
+context.lineWidth=5;
+context.stroke();
+</script>
+
+
+<canvas id="canv2" width="200" height="200"> Canvas not supported by your browser. Please use a modern browser.</canvas>
+<script type="text/javascript">
+var canv2 = document.getElementById('canv2');
+var context2 = canv2.getContext('2d');
+var cw = canv2.width;
+var ch = canv2.height;
+context2.strokeRect(0,0,cw,ch);
+/*
+canv2.addEventListener('mousemove' , function(event){
+	var rect = canv2.getBoundingClientRect();
+	var x = event.pageX - rect.left;
+	var y = event.pageY - rect.top;
+	context2.clearRect(1,1,50,30);
+	context2.fillText(x+","+y, 10, 10);
+});*/
+
+var h, m, s;//hour, minute, second
+function startWatch(){
+	var date = new Date();
+	h = date.getHours();
+	m = date.getMinutes();
+	s = date.getSeconds();
+	showTime();
+	setInterval(showTime, 1000);	
+}
+function showTime(){
+	context2.clearRect(1,1,cw-2,ch-2);
+	context2.beginPath();
+	context2.arc(cw/2,cw/2,98, 0, 2*Math.PI, true);
+	context2.font = "12px Arial";
+	context2.lineWidth = 2;
+	context2.stroke();
+	context2.save();
+	//context2.rotate(-0.5*Math.PI);
+	
+	for(var t = 1; t <= 12; t++){
+		var angle = Math.PI*(2*t/12-0.5);
+		var x = cw/2+85*Math.cos(angle), y = ch/2+85*Math.sin(angle); //x,y are points on circle
+		context2.fillText(t,x,y);		
+	}
+	context2.fillStyle = 'green';
+	for(var t = 1; t <= 60; t++){
+		var angle = Math.PI*(2*t/60-0.5);
+		var x = cw/2+98*Math.cos(angle), y = ch/2+98*Math.sin(angle); //x,y are points on circle
+		var pointWidth = 3;
+		if(t%5 == 0) pointWidth = 5;
+		context2.fillRect(x, y, pointWidth, pointWidth);
+	}
+	context2.font = "16px Arial";
+	context2.fillStyle = "#102d6e";
+	context2.fillText("Meritnation", 75, 130);
+	context2.restore();
+	context2.closePath();
+	s++;
+	if(s == 60) m++;
+	if(m == 60) h++;
+	s = s%60;
+	m = m%60;
+	h = h%12;
+	
+	//console.log(h+" "+m+" "+s);
+	
+	setNiddle(angle = s, niddle = 0);
+	setNiddle(angle = m, niddle = 1);
+	setNiddle(angle = h, niddle = 2);
+}
+function setNiddle(angle, niddle){
+	context2.save();	
+	context2.translate(cw/2,ch/2);
+	context2.beginPath();
+	context2.moveTo(0,0);
+	context2.rotate(-0.5*Math.PI);
+	//niddle = 0 for second, 1 for minute and 2 for hour
+	if(niddle == 0){		
+		context2.rotate(angle*6*Math.PI/180);
+		context2.lineTo(95, 0);		
+	}
+	if(niddle == 1){
+		context2.rotate(angle*6*Math.PI/180);
+		context2.lineTo(80, 0);
+	}
+	if(niddle == 2){
+		angle = angle + m/60; //minutes correction
+		context2.rotate(angle*30*Math.PI/180);
+		context2.lineTo(70, 0);
+	}
+	context2.closePath();
+	context2.stroke();
+	context2.restore();
+}
+startWatch();
+
+</script>
+
+
+</body>
+</html>
